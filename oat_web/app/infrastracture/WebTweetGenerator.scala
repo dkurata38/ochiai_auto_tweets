@@ -1,6 +1,6 @@
-package client
+package infrastracture
 
-import domain.tweet.{ITweetGeneratorClient, Tweet}
+import domain.tweet.{ITweetGenerator, Tweet}
 import javax.inject.{Inject, Singleton}
 import play.api.libs.ws.{WSClient, WSRequest}
 
@@ -9,7 +9,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
 @Singleton
-class TweetGeneratorClient @Inject()(ws: WSClient) extends ITweetGeneratorClient {
+class WebTweetGenerator @Inject()(ws: WSClient) extends ITweetGenerator {
 
   def generateTweet(twitterId: String): Tweet = {
     val request: WSRequest = ws.url("http://127.0.0.1:5000/generate_tweet/" + twitterId)

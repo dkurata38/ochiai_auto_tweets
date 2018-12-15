@@ -8,7 +8,7 @@ import javax.inject.{Inject, Singleton}
 import scala.collection.mutable
 
 @Singleton
-class TweetsService @Inject()(tweetGeneratorClient: ITweetGeneratorClient) extends ITweetsService {
+class TweetsService @Inject()(tweetGeneratorClient: ITweetGenerator) extends ITweetsService {
   override def generateTweet(tweets: Seq[Tweet]) = {
     val file = Paths.get("/Users/kuratadaisuke/ochiai_auto_tweets/tmp/" + tweets.head.getSenderId() + "tweet.txt")
     if(Files.notExists(file)) Files.createFile(file)

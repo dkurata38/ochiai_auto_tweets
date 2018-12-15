@@ -1,4 +1,4 @@
-package client
+package infrastracture
 
 import domain.tweet.{ITweetClient, Tweet}
 import javax.inject.Singleton
