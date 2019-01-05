@@ -32,12 +32,9 @@ class TweetController @Inject()(cc: ControllerComponents, tweetUseCase: TweetUse
           val newTweetData = newTweetForm.bindFromRequest().get
           Future {
             val tweet = tweetUseCase.generateTweet(twitterSession.getToken(), twitterSession.getSecret(), newTweetData.twitterId)
-            val twitterJsonResponse = {
-              if (tweet.isSuccess){
-                new TweetJsonResponse(tweet.get.getBody(), 200)
-              } else {
-                new TweetJsonResponse("", 500)
-              }
+            val twitterJsonResponse = tweet match {
+              case Right(text) => new TweetJsonResponse(text.getBody(), 200)
+              case Left(_) => new TweetJsonResponse("", 500)
             }
             // TODO return status code
             val json = libs.json.Json.parse(s"""{"tweetText":"${tweet.map{t => t.getBody()}.getOrElse("")}"}""")
