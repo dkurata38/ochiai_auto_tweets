@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
 import json
+import os
 import re
 import string
 
@@ -8,14 +9,16 @@ from janome.tokenizer import Tokenizer
 
 
 def analyze_csv_by_markov(text_file_name):
-    directory_name = "/Users/kuratadaisuke/ochiai_auto_tweets/tmp/"
+    base = os.path.dirname(os.path.abspath(__file__))
+    
+    directory_name = os.path.normpath(os.path.join(base, 'tmp'))
     with open(text_file_name) as f:
         tweets = f.readlines()
 
     text = []
     for i in range(0, len(tweets)):
         if not tweets[i].startswith("RT"):
-            tweets[i] = re.sub(r"(https?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+\$,%#]+)", "", tweets[i])
+            tweets[i] = re.sub(r"(https?|ftp)(://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)", "", tweets[i])
             tweets[i] = re.sub(r"@[a-zA-Z0-9_\-.]{3,15}", "", tweets[i])
             text.extend(tweets[i].split())
 
@@ -26,7 +29,9 @@ def analyze_csv_by_markov(text_file_name):
     words = t.tokenize("".join(formatted_text))
 
     dictionary = __make_dictionary(words)
-    json.dump(dictionary, open(directory_name + "markov-blog.json", "w", encoding="utf-8"))
+    dictionary_path = directory_name + "markov-blog.json"
+    json.dump(dictionary, open(dictionary_path, "w", encoding="utf-8"))
+    return dictionary_path
 
 
 def __make_dictionary(words):
