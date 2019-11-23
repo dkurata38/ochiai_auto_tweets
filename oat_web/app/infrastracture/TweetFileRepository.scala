@@ -7,7 +7,7 @@ import domain.tweet.{ITweetRepository, Tweet}
 
 class TweetFileRepository extends ITweetRepository{
   override def save(tweets: Seq[Tweet]): Unit = {
-    val file = Paths.get("/Users/kuratadaisuke/ochiai_auto_tweets/tmp/" + tweets.head.getSenderId() + "tweet.txt")
+    val file = Paths.get("conf/ochiai_auto_tweets/tmp/" + tweets.head.getSenderId() + "tweet.txt")
     if(Files.notExists(file)) Files.createFile(file)
 
     val fileInputWriter = new FileWriter(file.toFile)
